@@ -7,7 +7,7 @@
 # url: https://github.com/Marfeel/discourse-plugin-last-day-used-key
 # required_version: 2.7.0
 
-enabled_site_setting :plugin_name_enabled
+enabled_site_setting :discourse_plugin_markdown_html_whitelist_enabled
 
 module ::LastDayUsedKey
   PLUGIN_NAME = "discourse-plugin-last-day-used-key"
@@ -34,7 +34,9 @@ module ::LastDayUsedKey
   end
 
   module ApiKeyExtensions
-    def update_last_used!(now)
+    def update_last_used!(now = nil)
+      return if last_used_at && (last_used_at != Time.zone.now.beginning_of_day)
+
       super(Time.zone.now.beginning_of_day)
     end
   end
