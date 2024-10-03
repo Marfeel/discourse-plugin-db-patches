@@ -11,10 +11,8 @@ enabled_site_setting :plugin_name_enabled
 
 module ::LastDayUsedKey
   PLUGIN_NAME = "discourse-plugin-last-day-used-key"
-end
 
-after_initialize do
-  ::UserApiKey.class_eval do
+  module UserApiKeyExtensions
     def update_last_used(client_id)
       update_args = {}
 
@@ -35,11 +33,16 @@ after_initialize do
     end
   end
 
-  ::ApiKey.class_eval do
+  module ApiKeyExtensions
     def update_last_used!(now = Time.zone.now.beginning_of_day)
       return if last_used_at && (last_used_at == now)
 
       update_column(:last_used_at, now)
     end
   end
+end
+
+after_initialize do
+  ::UserApiKey.prepend(::LastDayUsedKey::UserApiKeyExtensions)
+  ::ApiKey.prepend(::LastDayUsedKey::ApiKeyExtensions)
 end
