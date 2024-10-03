@@ -1,1 +1,3 @@
 en:
+  site_settings:
+    discourse_plugin_last_day_used_key_enabled: "Change last used strategy to use last day instead of last time"
