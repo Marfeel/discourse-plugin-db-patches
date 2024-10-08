@@ -27,8 +27,8 @@ RSpec.describe LastDayUsedKey do
       }.not_to change { user_api_key.reload.last_used_at }
 
 
-      expect(user_api_key).not_to receive(:update_column)
-      expect(user_api_key).not_to receive(:update_columns)
+      expect(user_api_key).not_to have_received(:update_column)
+      expect(user_api_key).not_to have_received(:update_columns)
     end
 
     it 'updates client_id and destroys other keys with same client_id and user_id' do
