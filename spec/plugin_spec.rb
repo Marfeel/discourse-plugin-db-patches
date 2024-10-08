@@ -17,7 +17,7 @@ RSpec.describe LastDayUsedKey do
     end
 
     it 'does not update last_used_at if already set to beginning of the day' do
-      user_api_key.update!(last_used_at: Time.zone.now.beginning_of_day)
+      user_api_key.update!(last_used_at: Time.zone.now.beginning_of_day, client_id: "client_id_1")
 
       allow(user_api_key).to receive(:update_column)
       allow(user_api_key).to receive(:update_columns)
