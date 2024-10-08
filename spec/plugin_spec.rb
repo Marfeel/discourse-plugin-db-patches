@@ -19,12 +19,16 @@ RSpec.describe LastDayUsedKey do
     it 'does not update last_used_at if already set to beginning of the day' do
       user_api_key.update!(last_used_at: Time.zone.now.beginning_of_day)
 
-      expect(user_api_key).not_to receive(:update_column)
-      expect(user_api_key).not_to receive(:update_columns)
+      allow(user_api_key).to receive(:update_column)
+      allow(user_api_key).to receive(:update_columns)
 
       expect {
           user_api_key.update_last_used("client_id_1")
       }.not_to change { user_api_key.reload.last_used_at }
+
+
+      expect(user_api_key).not_to receive(:update_column)
+      expect(user_api_key).not_to receive(:update_columns)
     end
 
     it 'updates client_id and destroys other keys with same client_id and user_id' do
@@ -48,12 +52,15 @@ RSpec.describe LastDayUsedKey do
     end
 
     it 'does not perform any database write if last_used_at is already set to the beginning of the day' do
-        api_key.update!(last_used_at: Time.zone.now.beginning_of_day)
+      api_key.update!(last_used_at: Time.zone.now.beginning_of_day)
 
-        expect(api_key).not_to receive(:update_column)
-        expect(api_key).not_to receive(:update_columns)
+      allow(api_key).to receive(:update_column)
+      allow(api_key).to receive(:update_columns)
 
-        api_key.update_last_used!
+      api_key.update_last_used!
+
+      expect(api_key).not_to have_received(:update_column)
+      expect(api_key).not_to have_received(:update_columns)
     end
   end
 end
