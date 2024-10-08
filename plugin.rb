@@ -29,7 +29,7 @@ module ::LastDayUsedKey
         update_args[:client_id] = client_id
       end
 
-      self.update_columns(**update_args) if update_args.present?
+      self.update_columns(**update_args) unless update_args.empty?
     end
   end
 

@@ -23,9 +23,8 @@ RSpec.describe LastDayUsedKey do
       allow(user_api_key).to receive(:update_columns)
 
       expect {
-          user_api_key.update_last_used("client_id_1")
+        user_api_key.update_last_used("client_id_1")
       }.not_to change { user_api_key.reload.last_used_at }
-
 
       expect(user_api_key).not_to have_received(:update_column)
       expect(user_api_key).not_to have_received(:update_columns)
