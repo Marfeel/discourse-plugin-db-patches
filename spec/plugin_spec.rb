@@ -1,15 +1,10 @@
 # spec/plugin_spec.rb
+# frozen_string_literal: true
 
-require 'rails_helper'
-
-describe 'LastDayUsedKey Plugin' do
+RSpec.describe 'LastDayUsedKey Plugin' do
   let(:user) { Fabricate(:user) }
   let(:user_api_key) { Fabricate(:user_api_key, user: user) }
   let(:api_key) { Fabricate(:api_key, user: user) }
-
-  before do
-    SiteSetting.discourse_plugin_markdown_html_whitelist_enabled = true
-  end
 
   describe '#update_last_used for UserApiKey' do
     it 'updates last_used_at to beginning of the day if not already set' do
