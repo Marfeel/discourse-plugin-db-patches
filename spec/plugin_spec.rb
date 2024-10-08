@@ -37,26 +37,20 @@ RSpec.describe LastDayUsedKey do
   describe '#update_last_used! for ApiKey' do
     let(:api_key) { Fabricate(:api_key, last_used_at: nil) }
 
-    it 'updates last_used_at to beginning of the day if not already set' do
+    it 'updates last_used_at to the beginning of the day if not already set' do
         expect {
         api_key.update_last_used!
         }.to change { api_key.reload.last_used_at }
             .to(Time.zone.now.beginning_of_day)
     end
 
-    it 'does not update last_used_at if already set to the beginning of the day' do
+    it 'does not perform any database write if last_used_at is already set to the beginning of the day' do
         api_key.update!(last_used_at: Time.zone.now.beginning_of_day)
 
-        expect {
+        expect(api_key).not_to receive(:update_column)
+        expect(api_key).not_to receive(:update_columns)
+
         api_key.update_last_used!
-        }.not_to change { api_key.reload.last_used_at }
     end
-
-    it 'calls the original method when updating last_used_at' do
-        allow(api_key).to receive(:super).and_call_original
-
-        api_key.update_last_used!
-        expect(api_key).to have_received(:super).with(Time.zone.now.beginning_of_day)
-      end
   end
 end
