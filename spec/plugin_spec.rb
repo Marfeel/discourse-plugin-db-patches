@@ -19,8 +19,11 @@ RSpec.describe LastDayUsedKey do
     it 'does not update last_used_at if already set to beginning of the day' do
       user_api_key.update!(last_used_at: Time.zone.now.beginning_of_day)
 
+      expect(user_api_key).not_to receive(:update_column)
+      expect(user_api_key).not_to receive(:update_columns)
+
       expect {
-        user_api_key.update_last_used("client_id_1")
+          user_api_key.update_last_used("client_id_1")
       }.not_to change { user_api_key.reload.last_used_at }
     end
 

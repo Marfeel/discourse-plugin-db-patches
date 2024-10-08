@@ -35,7 +35,7 @@ module ::LastDayUsedKey
 
   module ApiKeyExtensions
     def update_last_used!(now = nil)
-      #return if last_used_at && (last_used_at == Time.zone.now.beginning_of_day)
+      return if last_used_at && (last_used_at == Time.zone.now.beginning_of_day)
 
       super(Time.zone.now.beginning_of_day)
     end
