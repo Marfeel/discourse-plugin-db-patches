@@ -51,5 +51,19 @@ RSpec.describe LastDayUsedKey do
         api_key.update_last_used!
       }.not_to change { api_key.reload.last_used_at }
     end
+
+    it 'calls the original method when last_used_at is nil' do
+        allow(api_key).to receive(:super).and_call_original
+
+        api_key.update_last_used!
+        expect(api_key).to have_received(:super).with(Time.zone.now.beginning_of_day)
+    end
+
+    it 'skips updating if last_used_at is already beginning of the day' do
+        api_key.update!(last_used_at: Time.zone.now.beginning_of_day)
+        expect(api_key).not_to receive(:super)
+
+        api_key.update_last_used!
+    end
   end
 end
