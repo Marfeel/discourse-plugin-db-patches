@@ -48,10 +48,6 @@ module ::LastDayUsedKey
 
     module ClassMethods
       def record_new_timing(args)
-        logger = Logger.new(STDOUT)
-
-        logger.info("timiiiiiiing overriden")
-
         row_count =
           DB.exec(
             "INSERT INTO post_timings (topic_id, user_id, post_number, msecs)
