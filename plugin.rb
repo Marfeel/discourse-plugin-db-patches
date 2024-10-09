@@ -41,13 +41,17 @@ module ::LastDayUsedKey
     end
   end
 
-  module UserStatExtensions
+  module PostTimingExtensions
     def self.prepended(base)
       base.singleton_class.prepend(ClassMethods)
     end
 
     module ClassMethods
-      def self.record_new_timing(args)
+      def record_new_timing(args)
+        logger = Logger.new(STDOUT)
+
+        logger.info("timiiiiiiing overriden")
+
         row_count =
           DB.exec(
             "INSERT INTO post_timings (topic_id, user_id, post_number, msecs)
@@ -68,5 +72,5 @@ end
 after_initialize do
   ::UserApiKey.prepend(::LastDayUsedKey::UserApiKeyExtensions)
   ::ApiKey.prepend(::LastDayUsedKey::ApiKeyExtensions)
-  ::UserStat.prepend(::LastDayUsedKey::UserStatExtensions)
+  ::PostTiming.prepend(::LastDayUsedKey::PostTimingExtensions)
 end
