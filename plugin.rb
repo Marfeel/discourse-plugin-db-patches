@@ -40,9 +40,33 @@ module ::LastDayUsedKey
       super(Time.zone.now.beginning_of_day)
     end
   end
+
+  module PostTimingExtensions
+    def self.prepended(base)
+      base.singleton_class.prepend(ClassMethods)
+    end
+
+    module ClassMethods
+      def record_new_timing(args)
+        row_count =
+          DB.exec(
+            "INSERT INTO post_timings (topic_id, user_id, post_number, msecs)
+                  SELECT :topic_id, :user_id, :post_number, :msecs
+                  ON CONFLICT DO NOTHING",
+            args,
+          )
+
+        return if row_count == 0
+        Post.where(
+          ["topic_id = :topic_id and post_number = :post_number", args],
+        ).update_all "reads = reads + 1"
+      end
+    end
+  end
 end
 
 after_initialize do
   ::UserApiKey.prepend(::LastDayUsedKey::UserApiKeyExtensions)
   ::ApiKey.prepend(::LastDayUsedKey::ApiKeyExtensions)
+  ::PostTiming.prepend(::LastDayUsedKey::PostTimingExtensions)
 end
