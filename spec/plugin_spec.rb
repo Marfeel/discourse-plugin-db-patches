@@ -1,7 +1,7 @@
 # spec/plugin_spec.rb
 # frozen_string_literal: true
 
-RSpec.describe DBPatches do
+RSpec.describe LastDayUsedKey do
   let(:user) { Fabricate(:user) }
   let(:user_api_key) { Fabricate(:user_api_key, user: user) }
   let(:api_key) { Fabricate(:api_key, user: user) }

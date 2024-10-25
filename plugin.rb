@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-# name: discourse-plugin-db-patches
+# name: discourse-plugin-last-day-used-key
 # about: changes last used strategy to use current day instead of current time
 # version: 0.0.1
 # authors: Marfeel
-# url: https://github.com/Marfeel/discourse-plugin-db-patches
+# url: https://github.com/Marfeel/discourse-plugin-last-day-used-key
 # required_version: 2.7.0
 
-enabled_site_setting :discourse_plugin_db_patches
+enabled_site_setting :discourse_plugin_markdown_html_whitelist_enabled
 
-module ::DBPatches
-  PLUGIN_NAME = "discourse-plugin-db-patches"
+module ::LastDayUsedKey
+  PLUGIN_NAME = "discourse-plugin-last-day-used-key"
 
   module UserApiKeyExtensions
     def update_last_used(client_id)
@@ -63,23 +63,10 @@ module ::DBPatches
       end
     end
   end
-
-  module UserStatExtension
-    def self.prepended(base)
-      base.singleton_class.prepend(ClassMethods)
-    end
-
-    module ClassMethods
-      def self.update_time_read!(id)
-
-      end
-    end
-  end
 end
 
 after_initialize do
-  ::UserApiKey.prepend(::DBPatches::UserApiKeyExtensions)
-  ::ApiKey.prepend(::DBPatches::ApiKeyExtensions)
-  ::PostTiming.prepend(::DBPatches::PostTimingExtensions)
-  ::UserStat.prepend(::DBPatches::UserStatExtension)
+  ::UserApiKey.prepend(::LastDayUsedKey::UserApiKeyExtensions)
+  ::ApiKey.prepend(::LastDayUsedKey::ApiKeyExtensions)
+  ::PostTiming.prepend(::LastDayUsedKey::PostTimingExtensions)
 end
