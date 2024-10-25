@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # name: discourse-plugin-db-patches
-# about: changes last used strategy to use current day instead of current time
+# about: patches user activity writes for reducing db workload
 # version: 0.0.1
 # authors: Marfeel
 # url: https://github.com/Marfeel/discourse-plugin-db-patches
