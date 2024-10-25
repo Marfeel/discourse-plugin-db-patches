@@ -1,4 +1,4 @@
 plugins:
-  discourse_plugin_last_day_used_key_enabled:
+  discourse_plugin_db_patches:
     default: false
     client: true
